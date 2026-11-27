@@ -2070,3 +2070,81 @@ a.oldhome-spot:hover {
     font-size: 16px;
   }
 }
+
+
+.wechat-page {
+  padding: 48px 20px 110px;
+  background: var(--paper);
+}
+
+.wechat-inner {
+  width: min(720px, 100%);
+  margin: 0 auto;
+}
+
+.wechat-head {
+  margin: 10px 0 34px;
+}
+
+.wechat-head h1 {
+  margin: 8px 0 14px;
+  font-family: var(--sans);
+  font-size: clamp(28px, 4vw, 38px);
+  font-weight: 600;
+  line-height: 1.3;
+  letter-spacing: -0.01em;
+}
+
+.wechat-article {
+  font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+  font-size: 17px;
+  line-height: 1.75;
+  letter-spacing: 0.034em;
+  color: #333;
+  word-break: break-word;
+}
+
+.wechat-article p {
+  margin: 0 0 1em;
+}
+
+.wechat-article section {
+  margin: 0;
+}
+
+.wechat-article img {
+  max-width: 100% !important;
+  height: auto !important;
+  display: block;
+  margin: 0 auto;
+}
+
+.wechat-article a {
+  color: #576b95;
+}
+
+.wechat-article table {
+  max-width: 100%;
+  border-collapse: collapse;
+}
+
+.wechat-article blockquote {
+  margin: 1em 0;
+  padding-left: 1em;
+  border-left: 3px solid #ddd;
+  color: #666;
+}
+
+@media (max-width: 600px) {
+  .wechat-page {
+    padding-top: 36px;
+  }
+
+  .wechat-head h1 {
+    font-size: 26px;
+  }
+
+  .wechat-article {
+    font-size: 16px;
+  }
+}

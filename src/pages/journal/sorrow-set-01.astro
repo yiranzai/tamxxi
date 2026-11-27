@@ -1,0 +1,40 @@
+---
+import Base from "../../layouts/Base.astro";
+import SiteHeader from "../../components/SiteHeader.astro";
+import { base, url } from "../../lib/paths";
+import contentHtml from "../../data/wechat/sorrow-set-01.html?raw";
+
+const html = contentHtml.replaceAll("__BASE__", base);
+const source = "https://mp.weixin.qq.com/s/WRWz-V5SMHJbpwjfg021hA";
+---
+
+<Base
+  title="#01 sorrow set 悲集 — Tamxxi"
+  description="关于火焰，关于人，关于自然和孕育，关于死亡和灰烬。Tamxxi 公众号原文归档。"
+>
+  <SiteHeader variant="inset" active="journal" />
+  <main class="wechat-page">
+    <div class="wechat-inner">
+      <a class="article-back" href={url("journal/")}>← Journal</a>
+
+      <header class="wechat-head">
+        <p class="work-card__cat">WeChat archive · 原创</p>
+        <h1>#01 sorrow set 悲集</h1>
+        <div class="article-meta">
+          <span>Tamxxi</span>
+          <span>2023年10月15日</span>
+          <span>广东</span>
+          <a href={source} target="_blank" rel="noreferrer">阅读原文 ↗</a>
+        </div>
+        <p class="article-desc">关于火焰，关于人，关于自然和孕育，关于死亡和灰烬。</p>
+      </header>
+
+      <article class="wechat-article" set:html={html} />
+
+      <footer class="article-foot">
+        <a href={url("journal/")}>← Back to journal</a>
+        <a href={source} target="_blank" rel="noreferrer">原文链接 ↗</a>
+      </footer>
+    </div>
+  </main>
+</Base>

@@ -2,7 +2,7 @@
 import { getCollection } from "astro:content";
 import Base from "../../layouts/Base.astro";
 import SiteHeader from "../../components/SiteHeader.astro";
-import { url } from "../../lib/paths";
+import { base, url } from "../../lib/paths";
 import { asset } from "../../react/data/assets";
 
 const link = url;
@@ -59,6 +59,15 @@ const formatDate = (date: Date) =>
             </button>
           ))
         }
+        <button
+          type="button"
+          class="filter-chip"
+          data-filter="archive"
+          aria-pressed="false"
+        >
+          存档
+          <span>1</span>
+        </button>
       </div>
 
       {
@@ -96,6 +105,34 @@ const formatDate = (date: Date) =>
                 </div>
               </a>
             ))}
+            <a
+              href={link("journal/sorrow-set-01/")}
+              class="journal-card"
+              data-category="archive"
+            >
+              <div class="journal-card__media">
+                <img
+                  src={`${base}wechat/sorrow-set-01/cover.jpg`}
+                  alt="#01 sorrow set 悲集"
+                  loading="lazy"
+                />
+              </div>
+              <div class="journal-card__body">
+                <p class="work-card__cat">WeChat archive</p>
+                <h2>#01 sorrow set 悲集</h2>
+                <p class="journal-card__desc">
+                  关于火焰，关于人，关于自然和孕育，关于死亡和灰烬。
+                </p>
+                <div class="journal-meta">
+                  <time datetime="2023-10-15">2023年10月15日</time>
+                  <div class="work-tags">
+                    <span>原创</span>
+                    <span>悲集</span>
+                    <span>2023</span>
+                  </div>
+                </div>
+              </div>
+            </a>
           </div>
         )
       }
