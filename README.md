@@ -1,8 +1,9 @@
 # TAMXXI
 
-Astro rebuild of the TAMXXI portfolio, published on GitHub Pages:
+Astro rebuild of the TAMXXI portfolio, published on GitHub Pages and Cloudflare Pages:
 
-<https://yiranzai.github.io/tamxxi/>
+- Cloudflare Pages: <https://tamxxi.pages.dev/>
+- GitHub Pages: <https://yiranzai.github.io/tamxxi/>
 
 ## Stack
 
@@ -80,5 +81,16 @@ The workflow in `.github/workflows/deploy.yml` builds and deploys on every push 
 - For a project site, `BASE_PATH` is set to `/<repo>/` automatically.
 - For a `<user>.github.io` repo, `BASE_PATH` is `/`.
 - In GitHub: Settings > Pages > Source: GitHub Actions.
+
+### Cloudflare Pages
+
+Cloudflare Pages serves the site at the domain root, so build without the `/tamxxi/` base:
+
+```bash
+BASE_PATH=/ SITE_URL=https://tamxxi.pages.dev npm run build
+npx wrangler pages deploy dist --project-name tamxxi
+```
+
+For automatic deploys, connect the GitHub repository in the Cloudflare Pages dashboard with build command `npm run build`, output directory `dist`, and environment variables `BASE_PATH=/` and `SITE_URL=https://tamxxi.pages.dev`.
 
 The placeholder introduction lives at `src/content/journal/about.md` and can be replaced without touching the layout.
