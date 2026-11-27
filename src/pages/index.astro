@@ -1,0 +1,10 @@
+---
+import Base from "../layouts/Base.astro";
+import SiteHeader from "../components/SiteHeader.astro";
+import Page from "../react/pages/Home";
+---
+
+<Base title="TAMXXI — 情绪贩卖" description="TAMXXI is an illustrator and designer based in Shenzhen, China.">
+  <SiteHeader variant="overlay" active="studio" />
+  <Page client:load />
+</Base>

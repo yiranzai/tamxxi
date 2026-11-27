@@ -1,0 +1,109 @@
+---
+import Base from "../layouts/Base.astro";
+import SiteHeader from "../components/SiteHeader.astro";
+import { url } from "../lib/paths";
+import { asset } from "../react/data/assets";
+import { categoryLabels, works, type WorkCategory } from "../data/works";
+
+const link = url;
+
+const filters: { key: "all" | WorkCategory; label: string }[] = [
+  { key: "all", label: "全部" },
+  { key: "painting", label: "绘画" },
+  { key: "sculpture", label: "雕塑" },
+  { key: "print", label: "出版物" },
+  { key: "video", label: "影像" },
+];
+
+const count = (key: "all" | WorkCategory) =>
+  key === "all" ? works.length : works.filter((work) => work.categories.includes(key)).length;
+---
+
+<Base
+  title="Works — TAMXXI"
+  description="Selected works by TAMXXI: paintings, sculptures, prints and moving images."
+>
+  <SiteHeader variant="inset" active="works" />
+  <main class="works-page">
+    <div class="works-inner">
+      <header class="works-head">
+        <p class="works-kicker">SELECTED WORKS</p>
+        <h1>情绪的形状</h1>
+        <p class="works-intro">
+          按媒介和情绪整理的八个入口。绘画、雕塑、出版物和影像，都是同一种冲动的不同出口。
+          筛选只是开始，作品之间没有边界。
+        </p>
+      </header>
+
+      <div class="works-filters" role="group" aria-label="Filter works">
+        {
+          filters.map((filter) => (
+            <button
+              type="button"
+              class={`filter-chip${filter.key === "all" ? " is-active" : ""}`}
+              data-filter={filter.key}
+              aria-pressed={filter.key === "all"}
+            >
+              {filter.label}
+              <span>{count(filter.key)}</span>
+            </button>
+          ))
+        }
+      </div>
+
+      <div class="works-grid">
+        {
+          works.map((work) => (
+            <a
+              href={link(work.href)}
+              class={`work-card${work.tone ? ` work-card--${work.tone}` : ""}`}
+              data-category={work.categories.join(" ")}
+            >
+              <div class="work-card__media">
+                <img src={asset(work.image)} alt={work.english} loading="lazy" />
+              </div>
+              <div class="work-card__body">
+                <p class="work-card__cat">
+                  {work.categories.map((category) => categoryLabels[category]).join(" / ")}
+                </p>
+                <h2>{work.title}</h2>
+                <p class="work-card__meta">
+                  {work.english} · {work.medium} · {work.year}
+                </p>
+                <div class="work-tags">
+                  {work.tags.map((tag) => (
+                    <span>{tag}</span>
+                  ))}
+                </div>
+              </div>
+            </a>
+          ))
+        }
+      </div>
+
+      <p class="works-foot">
+        <a href={link("flow/")}>Browse the full flow →</a>
+      </p>
+    </div>
+  </main>
+
+  <script>
+    const filters = document.querySelectorAll("[data-filter]");
+    const cards = document.querySelectorAll("[data-category]");
+
+    filters.forEach((button) => {
+      button.addEventListener("click", () => {
+        const filter = button.getAttribute("data-filter");
+        filters.forEach((item) => {
+          const active = item === button;
+          item.classList.toggle("is-active", active);
+          item.setAttribute("aria-pressed", String(active));
+        });
+        cards.forEach((card) => {
+          const categories = (card.getAttribute("data-category") || "").split(" ");
+          card.hidden = filter !== "all" && !categories.includes(filter);
+        });
+      });
+    });
+  </script>
+</Base>

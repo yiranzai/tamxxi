@@ -1,0 +1,105 @@
+---
+import { A, asset } from "../react/data/assets";
+import { url } from "../lib/paths";
+
+interface Props {
+  variant?: "inset" | "full" | "overlay";
+  active?: "shop" | "works" | "journal" | "about" | "studio" | null;
+}
+
+const { variant = "inset", active = null } = Astro.props;
+const href = url;
+
+const nav = [
+  { label: "SHOP", path: "shop/", key: "shop" },
+  { label: "ART Works", path: "works/", key: "works" },
+  { label: "JOURNAL", path: "journal/", key: "journal" },
+  { label: "Studio", path: "", key: "studio" },
+  { label: "About", path: "journal/about/", key: "about" },
+];
+---
+
+<header class={`site-header site-header--${variant}`}>
+  <div class="site-header__inner">
+    <a href={href("")} class="brand" aria-label="TAMXXI home">
+      <img src={asset(A.logo)} alt="情绪贩卖 TAMXXI" />
+    </a>
+    <nav class="nav-desktop" aria-label="Main">
+      {
+        nav.map((item) => (
+          <a
+            href={href(item.path)}
+            class={`nav-link${active === item.key ? " is-active" : ""}`}
+          >
+            {item.label}
+          </a>
+        ))
+      }
+    </nav>
+    <button
+      class="nav-burger"
+      type="button"
+      aria-label="Open menu"
+      aria-expanded="false"
+      aria-controls="site-menu"
+    >
+      <span></span>
+      <span></span>
+    </button>
+  </div>
+</header>
+
+<div class="menu-overlay" id="site-menu" aria-hidden="true">
+  <div class="menu-top">
+    <a href={href("")} aria-label="TAMXXI home">
+      <img src={asset(A.logo)} alt="情绪贩卖 TAMXXI" />
+    </a>
+    <button type="button" class="menu-close" aria-label="Close menu">×</button>
+  </div>
+  <nav class="menu-links" aria-label="Mobile">
+    <a href={href("shop/")}>SHOP</a>
+    <a href={href("works/")}>ART Works</a>
+    <a href={href("flow/")}>FLOW</a>
+    <a href={href("journal/")}>JOURNAL</a>
+    <a href={href("")}>Studio</a>
+    <a href={href("journal/about/")}>About</a>
+  </nav>
+  <div class="menu-meta">
+    <a href="https://www.instagram.com/tamxxi_/" target="_blank" rel="noreferrer">
+      Instagram — @tamxxi_
+    </a>
+    <a
+      href="https://www.xiaohongshu.com/search_result?keyword=tamxxi"
+      target="_blank"
+      rel="noreferrer"
+    >
+      小红书 — tamxxi
+    </a>
+  </div>
+</div>
+
+<script>
+  const burger = document.querySelector(".nav-burger");
+  const overlay = document.querySelector(".menu-overlay");
+  const close = document.querySelector(".menu-close");
+
+  const setOpen = (open) => {
+    if (!overlay || !burger) return;
+    overlay.classList.toggle("is-open", open);
+    burger.classList.toggle("is-open", open);
+    burger.setAttribute("aria-expanded", String(open));
+    overlay.setAttribute("aria-hidden", String(!open));
+    document.body.style.overflow = open ? "hidden" : "";
+  };
+
+  burger?.addEventListener("click", () => {
+    setOpen(!overlay?.classList.contains("is-open"));
+  });
+  close?.addEventListener("click", () => setOpen(false));
+  overlay?.querySelectorAll("a").forEach((link) => {
+    link.addEventListener("click", () => setOpen(false));
+  });
+  window.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") setOpen(false);
+  });
+</script>

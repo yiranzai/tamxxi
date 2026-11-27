@@ -1,0 +1,123 @@
+---
+import { getCollection } from "astro:content";
+import Base from "../../layouts/Base.astro";
+import SiteHeader from "../../components/SiteHeader.astro";
+import { url } from "../../lib/paths";
+import { asset } from "../../react/data/assets";
+
+const link = url;
+const entries = (await getCollection("journal")).sort(
+  (a, b) => b.data.date.getTime() - a.data.date.getTime()
+);
+
+const labels: Record<string, string> = {
+  about: "关于",
+  notes: "手记",
+  process: "过程",
+  exhibition: "展览",
+};
+
+const present = [...new Set(entries.map((entry) => entry.data.category))];
+const filters = [
+  { key: "all", label: "全部" },
+  ...present.map((key) => ({ key, label: labels[key] ?? key })),
+];
+
+const count = (key: string) =>
+  key === "all" ? entries.length : entries.filter((entry) => entry.data.category === key).length;
+
+const formatDate = (date: Date) =>
+  new Intl.DateTimeFormat("zh-CN", { year: "numeric", month: "long", day: "numeric" }).format(date);
+---
+
+<Base
+  title="Journal — TAMXXI"
+  description="Notes from the studio: writing, process and small confessions by TAMXXI."
+>
+  <SiteHeader variant="inset" active="journal" />
+  <main class="journal-page">
+    <div class="journal-inner">
+      <header class="journal-head">
+        <p class="works-kicker">JOURNAL</p>
+        <h1>Notes from the studio</h1>
+        <p class="works-intro">
+          关于画画、雕塑、纸张和一些没有归类的念头。新的文章会按「关于、手记、过程、展览」归档。
+        </p>
+      </header>
+
+      <div class="works-filters" role="group" aria-label="Filter journal">
+        {
+          filters.map((filter) => (
+            <button
+              type="button"
+              class={`filter-chip${filter.key === "all" ? " is-active" : ""}`}
+              data-filter={filter.key}
+              aria-pressed={filter.key === "all"}
+            >
+              {filter.label}
+              <span>{count(filter.key)}</span>
+            </button>
+          ))
+        }
+      </div>
+
+      {
+        entries.length === 0 ? (
+          <p class="journal-empty">还没有文章。</p>
+        ) : (
+          <div class="journal-list">
+            {entries.map((entry) => (
+              <a
+                href={link(`journal/${entry.id}/`)}
+                class="journal-card"
+                data-category={entry.data.category}
+              >
+                {entry.data.cover && (
+                  <div class="journal-card__media">
+                    <img
+                      src={asset(entry.data.cover)}
+                      alt={entry.data.coverAlt || entry.data.title}
+                      loading="lazy"
+                    />
+                  </div>
+                )}
+                <div class="journal-card__body">
+                  <p class="work-card__cat">{labels[entry.data.category] ?? entry.data.category}</p>
+                  <h2>{entry.data.title}</h2>
+                  <p class="journal-card__desc">{entry.data.description}</p>
+                  <div class="journal-meta">
+                    <time datetime={entry.data.date.toISOString()}>{formatDate(entry.data.date)}</time>
+                    <div class="work-tags">
+                      {entry.data.tags.map((tag) => (
+                        <span>{tag}</span>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </a>
+            ))}
+          </div>
+        )
+      }
+    </div>
+  </main>
+
+  <script>
+    const filters = document.querySelectorAll("[data-filter]");
+    const cards = document.querySelectorAll("[data-category]");
+
+    filters.forEach((button) => {
+      button.addEventListener("click", () => {
+        const filter = button.getAttribute("data-filter");
+        filters.forEach((item) => {
+          const active = item === button;
+          item.classList.toggle("is-active", active);
+          item.setAttribute("aria-pressed", String(active));
+        });
+        cards.forEach((card) => {
+          card.hidden = filter !== "all" && card.getAttribute("data-category") !== filter;
+        });
+      });
+    });
+  </script>
+</Base>

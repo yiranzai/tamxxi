@@ -1,0 +1,10 @@
+---
+import Base from "../layouts/Base.astro";
+import SiteHeader from "../components/SiteHeader.astro";
+import Page from "../react/pages/Shop";
+---
+
+<Base title="SHOP — TAMXXI" description="Vinyl records, zines and printed work by TAMXXI.">
+  <SiteHeader variant="inset" active="shop" />
+  <Page client:load />
+</Base>

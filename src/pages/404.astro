@@ -1,0 +1,22 @@
+---
+import Base from "../layouts/Base.astro";
+import SiteHeader from "../components/SiteHeader.astro";
+import { url } from "../lib/paths";
+
+const link = url;
+---
+
+<Base title="404 — TAMXXI" description="This page is not here.">
+  <SiteHeader variant="full" />
+  <main class="empty-page">
+    <div class="empty-page__main">
+      <p class="empty-page__eyebrow">404</p>
+      <h1>NOTHING HERE</h1>
+      <p>This room is still being drawn.</p>
+      <div class="article-foot" style="border: 0; padding-top: 0; gap: 28px;">
+        <a href={link("")}>Back to the studio →</a>
+        <a href={link("works/")}>See the works →</a>
+      </div>
+    </div>
+  </main>
+</Base>
